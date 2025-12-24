@@ -2,48 +2,69 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Para Hayee 💖</title>
+<title>Galaxia para Hayee</title>
+
 <style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: black;
-    font-family: Arial, sans-serif;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #050510, #000);
+  font-family: Arial, sans-serif;
+}
 
-  .center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 52px;
-    font-weight: bold;
-    z-index: 10;
-    text-shadow: 0 0 15px pink;
-  }
+#galaxia {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
 
-  .word {
-    position: absolute;
-    color: white;
-    font-size: 18px;
-    opacity: 0.85;
-    pointer-events: none;
-    text-shadow: 0 0 8px rgba(255,255,255,0.6);
+/* TEXTO CENTRAL (AL FRENTE) */
+.centro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  color: #ff5f7e;
+  text-shadow: 0 0 25px #ff5f7e;
+  z-index: 10; /* MUY AL FRENTE */
+  pointer-events: none;
+}
+
+/* PALABRAS ORBITANDO (DETRÁS) */
+.palabra {
+  position: absolute;
+  color: white;
+  font-size: 18px;
+  opacity: 0.9;
+  z-index: 1; /* DETRÁS DEL NOMBRE */
+  animation: orbitar linear infinite;
+}
+
+@keyframes orbitar {
+  from {
+    transform: rotate(0deg) translateX(var(--radio)) rotate(0deg);
   }
+  to {
+    transform: rotate(360deg) translateX(var(--radio)) rotate(-360deg);
+  }
+}
 </style>
 </head>
+
 <body>
-
-<div class="center">Hayee</div>
-
-<script src="https://cdn.jsdelivr.net/npm/three@0.152/build/three.min.js"></script>
+<div id="galaxia">
+  <div class="centro">Hayee</div>
+</div>
 
 <script>
-const words = [
+const palabras = [
   "Te amo",
   "Mi amor",
-  "Mi bb chiquita",
+  "Mi bebita",
   "Mi changuita",
   "Mi mujer",
   "Kairita",
@@ -59,73 +80,26 @@ const words = [
   "Cabezona",
   "Enojona",
   "Amor de mi vida",
-  "Te amo mucho"
+  "Te amo muchoo"
 ];
 
-// 🌌 Escena
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.z = 6;
+const galaxia = document.getElementById("galaxia");
 
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+palabras.forEach((texto, i) => {
+  const palabra = document.createElement("div");
+  palabra.className = "palabra";
+  palabra.textContent = texto;
 
-// ✨ Estrellas
-const starGeo = new THREE.BufferGeometry();
-const starCount = 5000;
-const starPos = [];
+  const radio = 130 + i * 10;
+  const duracion = 22 + i * 1.5;
 
-for (let i = 0; i < starCount; i++) {
-  starPos.push(
-    (Math.random() - 0.5) * 120,
-    (Math.random() - 0.5) * 120,
-    (Math.random() - 0.5) * 120
-  );
-}
+  palabra.style.setProperty("--radio", radio + "px");
+  palabra.style.animationDuration = duracion + "s";
+  palabra.style.top = "50%";
+  palabra.style.left = "50%";
+  palabra.style.transformOrigin = "0 0";
 
-starGeo.setAttribute("position", new THREE.Float32BufferAttribute(starPos, 3));
-
-const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.3 });
-const stars = new THREE.Points(starGeo, starMat);
-scene.add(stars);
-
-// 💖 Palabras orbitando
-const wordElements = words.map(word => {
-  const div = document.createElement("div");
-  div.className = "word";
-  div.textContent = word;
-  document.body.appendChild(div);
-  return {
-    el: div,
-    angle: Math.random() * Math.PI * 2,
-    radius: 150 + Math.random() * 100,
-    speed: 0.0005 + Math.random() * 0.001
-  };
-});
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  stars.rotation.y += 0.0006;
-  stars.rotation.x += 0.0003;
-
-  wordElements.forEach(w => {
-    w.angle += w.speed;
-    const x = window.innerWidth / 2 + Math.cos(w.angle) * w.radius;
-    const y = window.innerHeight / 2 + Math.sin(w.angle) * w.radius;
-    w.el.style.transform = `translate(${x}px, ${y}px)`;
-  });
-
-  renderer.render(scene, camera);
-}
-
-animate();
-
-window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  galaxia.appendChild(palabra);
 });
 </script>
 
