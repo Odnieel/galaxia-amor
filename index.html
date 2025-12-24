@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Galaxia de Amor</title>
+
 <style>
 html, body {
     margin: 0;
@@ -10,8 +11,8 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: radial-gradient(circle at center, #16002e, #000);
-    font-family: 'Arial', sans-serif;
+    background: black;
+    font-family: Arial, sans-serif;
 }
 
 #galaxia {
@@ -30,28 +31,29 @@ html, body {
     font-weight: bold;
     color: red;
     z-index: 10;
-    text-shadow: 0 0 35px rgba(255,0,0,0.9);
+    text-shadow: 0 0 30px rgba(255,0,0,1);
 }
 
 /* PALABRAS */
 .palabra {
     position: absolute;
+    left: -40%;
     white-space: nowrap;
     font-size: 22px;
     color: #b266ff;
-    opacity: 0.75;
+    opacity: 0.85;
+    z-index: 5;
     animation: mover linear infinite;
-    z-index: 2;
-    text-shadow: 0 0 12px rgba(178,102,255,0.8);
+    text-shadow: 0 0 12px rgba(178,102,255,0.9);
 }
 
-/* MOVIMIENTO */
+/* MOVIMIENTO IZQUIERDA → DERECHA */
 @keyframes mover {
     from {
-        transform: translateX(-350px);
+        transform: translateX(0);
     }
     to {
-        transform: translateX(calc(100vw + 350px));
+        transform: translateX(180vw);
     }
 }
 
@@ -71,8 +73,8 @@ html, body {
 }
 </style>
 </head>
-<body>
 
+<body>
 <div id="galaxia">
     <div id="centro">Hayee</div>
 </div>
@@ -87,30 +89,36 @@ const palabras = [
 
 const galaxia = document.getElementById("galaxia");
 
-/* CREAR PALABRAS POR TODA LA PANTALLA */
+/* PALABRAS VISIBLES SIEMPRE */
 palabras.forEach(texto => {
-    const repeticiones = 3;
-    for (let i = 0; i < repeticiones; i++) {
-        const span = document.createElement("div");
-        span.className = "palabra";
-        span.innerText = texto;
+    for (let i = 0; i < 4; i++) {
+        const palabra = document.createElement("div");
+        palabra.className = "palabra";
+        palabra.innerText = texto;
 
-        span.style.top = Math.random() * 100 + "%";
-        span.style.animationDuration = (12 + Math.random() * 25) + "s";
-        span.style.animationDelay = (-Math.random() * 20) + "s";
+        palabra.style.top = Math.random() * 95 + "%";
+        palabra.style.animationDuration = (12 + Math.random() * 18) + "s";
+        palabra.style.animationDelay = (-Math.random() * 20) + "s";
 
-        galaxia.appendChild(span);
+        galaxia.appendChild(palabra);
     }
 });
 
-/* CREAR ESTRELLAS */
-for (let i = 0; i < 180; i++) {
+/* ESTRELLAS PARPADEANTES */
+for (let i = 0; i < 250; i++) {
     const estrella = document.createElement("div");
     estrella.className = "estrella";
 
-    const size = Math.random() * 2.5 + 0.5;
+    const size = Math.random() * 2 + 1;
     estrella.style.width = size + "px";
     estrella.style.height = size + "px";
-
     estrella.style.top = Math.random() * 100 + "%";
-    estrella
+    estrella.style.left = Math.random() * 100 + "%";
+    estrella.style.animationDuration = (2 + Math.random() * 5) + "s";
+
+    galaxia.appendChild(estrella);
+}
+</script>
+
+</body>
+</html>
