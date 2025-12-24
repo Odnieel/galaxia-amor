@@ -2,106 +2,115 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Galaxia para Hayee</title>
-
+<title>Galaxia de Amor</title>
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: radial-gradient(circle at center, #050510, #000);
-  font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #16002e, #000);
+    font-family: 'Arial', sans-serif;
 }
 
 #galaxia {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-/* TEXTO CENTRAL (AL FRENTE) */
-.centro {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 64px;
-  color: #ff5f7e;
-  text-shadow: 0 0 25px #ff5f7e;
-  z-index: 10; /* MUY AL FRENTE */
-  pointer-events: none;
+/* TEXTO CENTRAL */
+#centro {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    font-weight: bold;
+    color: red;
+    z-index: 10;
+    text-shadow: 0 0 35px rgba(255,0,0,0.9);
 }
 
-/* PALABRAS ORBITANDO (DETRÁS) */
+/* PALABRAS */
 .palabra {
-  position: absolute;
-  color: white;
-  font-size: 18px;
-  opacity: 0.9;
-  z-index: 1; /* DETRÁS DEL NOMBRE */
-  animation: orbitar linear infinite;
+    position: absolute;
+    white-space: nowrap;
+    font-size: 22px;
+    color: #b266ff;
+    opacity: 0.75;
+    animation: mover linear infinite;
+    z-index: 2;
+    text-shadow: 0 0 12px rgba(178,102,255,0.8);
 }
 
-@keyframes orbitar {
-  from {
-    transform: rotate(0deg) translateX(var(--radio)) rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg) translateX(var(--radio)) rotate(-360deg);
-  }
+/* MOVIMIENTO */
+@keyframes mover {
+    from {
+        transform: translateX(-350px);
+    }
+    to {
+        transform: translateX(calc(100vw + 350px));
+    }
+}
+
+/* ESTRELLAS */
+.estrella {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    z-index: 1;
+    animation: parpadeo ease-in-out infinite;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
 }
 </style>
 </head>
-
 <body>
+
 <div id="galaxia">
-  <div class="centro">Hayee</div>
+    <div id="centro">Hayee</div>
 </div>
 
 <script>
 const palabras = [
-  "Te amo",
-  "Mi amor",
-  "Mi bebita",
-  "Mi changuita",
-  "Mi mujer",
-  "Kairita",
-  "Preciosa",
-  "Hermosa",
-  "Monita",
-  "Linda",
-  "Guapa",
-  "Mi solecito",
-  "Mi cielo",
-  "Mi niña",
-  "Ojitos preciosos",
-  "Cabezona",
-  "Enojona",
-  "Amor de mi vida",
-  "Te amo muchoo"
+"Teamo","Miamor","Mibbtiquita","Michanguita","Mimujer",
+"Kairita","Preciosa","Hermosa","Monita","Linda","Guapa",
+"Misolecito","Micielo","Miniña","Ojitos preciosos",
+"Cabezona","Enojona","Amor de mi vida","Teamoomuchoo"
 ];
 
 const galaxia = document.getElementById("galaxia");
 
-palabras.forEach((texto, i) => {
-  const palabra = document.createElement("div");
-  palabra.className = "palabra";
-  palabra.textContent = texto;
+/* CREAR PALABRAS POR TODA LA PANTALLA */
+palabras.forEach(texto => {
+    const repeticiones = 3;
+    for (let i = 0; i < repeticiones; i++) {
+        const span = document.createElement("div");
+        span.className = "palabra";
+        span.innerText = texto;
 
-  const radio = 130 + i * 10;
-  const duracion = 22 + i * 1.5;
+        span.style.top = Math.random() * 100 + "%";
+        span.style.animationDuration = (12 + Math.random() * 25) + "s";
+        span.style.animationDelay = (-Math.random() * 20) + "s";
 
-  palabra.style.setProperty("--radio", radio + "px");
-  palabra.style.animationDuration = duracion + "s";
-  palabra.style.top = "50%";
-  palabra.style.left = "50%";
-  palabra.style.transformOrigin = "0 0";
-
-  galaxia.appendChild(palabra);
+        galaxia.appendChild(span);
+    }
 });
-</script>
 
-</body>
-</html>
+/* CREAR ESTRELLAS */
+for (let i = 0; i < 180; i++) {
+    const estrella = document.createElement("div");
+    estrella.className = "estrella";
+
+    const size = Math.random() * 2.5 + 0.5;
+    estrella.style.width = size + "px";
+    estrella.style.height = size + "px";
+
+    estrella.style.top = Math.random() * 100 + "%";
+    estrella
